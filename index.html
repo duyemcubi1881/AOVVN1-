@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo Key Panel AOV</title>
+    <link href="https://cdn.tailwindcss.com" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            background: #0f172a;
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+            color: #e2e8f0;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .particle-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXJ0aWNsZXMiIHdpZHRoPSI1MCIgaGVpZ2h0PSI1MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PGNpcmNsZSBjeD0iNSIgY3k9IjUiIHI9IjEiIGZpbGw9InJnYmEoMTQ0LCAxOTUsIDI1NSwgMC4xKSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNwYXJ0aWNsZXMpIi8+PC9zdmc+');
+            animation: drift 20s infinite linear;
+        }
+        .container {
+            background: rgba(30, 41, 59, 0.95);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(59, 130, 246, 0.4);
+            max-width: 750px;
+            margin: 40px auto;
+            animation: fadeIn 0.8s ease-out;
+            position: relative;
+            z-index: 10;
+        }
+        h1, h2 {
+            color: #ffffff;
+            margin-bottom: 25px;
+        }
+        h1 {
+            font-size: 2.25rem;
+            font-weight: bold;
+        }
+        h2 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        .card {
+            background: linear-gradient(45deg, #1e293b, #2d3748);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            animation: slideIn 0.5s ease-out;
+            transition: transform 0.3s ease;
+            min-height: 200px;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+        }
+        .form-group {
+            margin-bottom: 1.25rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+        input[type="text"], input[type="number"] {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            color: #e2e8f0;
+            width: 100%;
+            padding: 0.75rem 2.5rem;
+            border-radius: 0.5rem;
+            transition: border 0.3s ease, box-shadow 0.3s ease;
+        }
+        input[type="text"]:focus, input[type="number"]:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+            outline: none;
+        }
+        input[type="text"]::placeholder, input[type="number"]::placeholder {
+            color: #94a3b8;
+        }
+        .btn {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(90deg, #3b82f6, #a855f7);
+            color: #ffffff;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.5s ease, height 0.5s ease;
+        }
+        .btn:active::after {
+            width: 200px;
+            height: 200px;
+            opacity: 0;
+        }
+        .btn-red {
+            background: linear-gradient(90deg, #ef4444, #b91c1c);
+        }
+        .btn-red:hover {
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+        }
+        .btn-green {
+            background: linear-gradient(90deg, #34d399, #15803d);
+        }
+        .btn-green:hover {
+            box-shadow: 0 0 20px rgba(52, 211, 153, 0.5);
+        }
+        .btn-orange {
+            background: linear-gradient(90deg, #f59e0b, #d97706);
+        }
+        .btn-orange:hover {
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+        }
+        #message {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            display: none;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .msg-success {
+            background: linear-gradient(45deg, #15803d, #34d399);
+            color: #ffffff;
+            border: 1px solid rgba(52, 211, 153, 0.4);
+        }
+        .msg-error {
+            background: linear-gradient(45deg, #b91c1c, #ef4444);
+            color: #ffffff;
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+        .msg-info {
+            background: linear-gradient(45deg, #1e40af, #3b82f6);
+            color: #ffffff;
+            border: 1px solid rgba(59, 130, 246, 0.4);
+        }
+        table {
+            width: 100%;
+            max-width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.25rem;
+            background: linear-gradient(45deg, #1e293b, #2d3748);
+            border: 1px solid rgba(59, 130, 246, 0.4);
+            border-radius: 0.5rem;
+            overflow-x: auto;
+        }
+        th, td {
+            padding: 0.4rem 0.2rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(59, 130, 246, 0.4);
+            color: #e2e8f0;
+            white-space: nowrap;
+            font-size: 0.8rem;
+        }
+        th {
+            background: #1e293b;
+            font-weight: 600;
+        }
+        tr:hover {
+            background: rgba(59, 130, 246, 0.1);
+        }
+        .badge {
+            padding: 0.2rem 0.4rem;
+            border-radius: 0.3rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .badge-success {
+            background: linear-gradient(45deg, #15803d, #34d399);
+            color: #ffffff;
+        }
+        .badge-danger {
+            background: linear-gradient(45deg, #b91c1c, #ef4444);
+            color: #ffffff;
+        }
+        .actions-col {
+            width: 12%;
+            white-space: nowrap;
+        }
+        .check-result {
+            background: #1e293b;
+            border: 1px solid rgba(96, 165, 250, 0.4);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            color: #ffffff;
+            animation: slideUp 0.5s ease-out;
+            position: relative;
+        }
+        .check-result:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(96, 165, 250, 0.3);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes drift {
+            0% { background-position: 0 0; }
+            100% { background-position: 100% 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="particle-bg"></div>
+    <div class="container">
+        <h1 class="text-center"><i class="fa-solid fa-key mr-2 text-blue-400"></i>TẠO KEY PANEL AOV</h1>
+
+        <div id="message" class="hidden"></div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+            <div class="card">
+                <h2 class="mb-4"><i class="fa-solid fa-plus mr-2 text-blue-400"></i>Create New Key</h2>
+                <div class="form-group">
+                    <label for="create_days">Expiration in Days:</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-clock absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-400"></i>
+                        <input type="number" id="create_days" value="3" class="w-full pl-10">
+                    </div>
+                </div>
+                <button onclick="createKey()" class="btn w-full"><i class="fa-solid fa-plus mr-2"></i>Create Key</button>
+            </div>
+
+            <div class="card">
+                <h2 class="mb-4"><i class="fa-solid fa-search mr-2 text-blue-400"></i>Check Key Details</h2>
+                <div class="form-group">
+                    <label for="check_key_input">Key to Check:</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-key absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-400"></i>
+                        <input type="text" id="check_key_input" placeholder="AOV-VN-XXXXXXXXXX" class="w-full pl-10">
+                    </div>
+                </div>
+                <button onclick="checkKey()" class="btn btn-orange w-full"><i class="fa-solid fa-search mr-2"></i>Check Key</button>
+                <div id="check_result" class="check-result mt-4 hidden"></div>
+            </div>
+        </div>
+
+        <h2 class="mt-10 mb-5"><i class="fa-solid fa-list mr-2 text-blue-400"></i>All Keys</h2>
+        <div class="card">
+            <table id="keys_table">
+                <thead>
+                    <tr>
+                        <th>Key String</th>
+                        <th>Expires</th>
+                        <th>IP</th>
+                        <th>Status</th>
+                        <th>Violations</th>
+                        <th class="actions-col">Actions</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+            <button onclick="loadKeys()" class="btn mt-5"><i class="fa-solid fa-refresh mr-2"></i>Refresh Keys</button>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = "https://tedexe.site/aov/api";
+
+        function showMessage(msg, type = 'msg-success') {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = msg;
+            messageDiv.className = `p-4 mb-4 text-sm rounded-lg ${type}`;
+            messageDiv.style.display = 'block';
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        async function callApi(endpoint, method = 'GET', data = null, retries = 3) {
+            for (let attempt = 1; attempt <= retries; attempt++) {
+                const options = {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                };
+                if (data) {
+                    options.body = JSON.stringify(data);
+                }
+                try {
+                    const response = await fetch(`${API_BASE_URL}${endpoint}`, options);
+                    const result = await response.json();
+                    if (response.ok) {
+                        return { success: true, data: result };
+                    } else {
+                        console.error(`API error response (attempt ${attempt}):`, result);
+                        return { success: false, error: result.error || `HTTP ${response.status}: ${response.statusText}` };
+                    }
+                } catch (e) {
+                    console.error(`API call error (attempt ${attempt}):`, e);
+                    if (attempt === retries) {
+                        return { success: false, error: 'Network error or API is down. Check server status.' };
+                    }
+                    await new Promise(resolve => setTimeout(resolve, 1000 * attempt));
+                }
+            }
+        }
+
+        async function createKey() {
+            const days = document.getElementById('create_days').value;
+            const result = await callApi('/createkey', 'POST', { days: parseInt(days), created_by: 'AOVADMIN' });
+            if (result.success) {
+                showMessage(`Key created: ${result.data.key} (expires: ${new Date(result.data.expires).toLocaleString()})`, 'msg-success');
+                loadKeys();
+            } else {
+                showMessage(`Error creating key: ${result.error}`, 'msg-error');
+            }
+        }
+
+        async function checkKey() {
+            const key = document.getElementById('check_key_input').value;
+            if (!key) {
+                showMessage("Please enter a key to check.", "msg-error");
+                return;
+            }
+            const result = await callApi(`/checkkey?key=${key}`, 'GET');
+            const checkResultDiv = document.getElementById('check_result');
+            if (result.success) {
+                checkResultDiv.innerHTML = `
+                    <p><strong><i class="fa-solid fa-key mr-2 text-blue-400"></i>Key:</strong> ${result.data.key}</p>
+                    <p><strong><i class="fa-solid fa-flag mr-2 text-blue-400"></i>Status:</strong> <span class="badge ${result.data.is_banned ? 'badge-danger' : 'badge-success'}">${result.data.status}</span></p>
+                    <p><strong><i class="fa-solid fa-clock mr-2 text-blue-400"></i>Expires:</strong> ${new Date(result.data.expires).toLocaleString()}</p>
+                    <p><strong><i class="fa-solid fa-globe mr-2 text-blue-400"></i>IP:</strong> ${result.data.hwid || 'Not assigned'}</p>
+                    <p><strong><i class="fa-solid fa-users mr-2 text-blue-400"></i>Used By:</strong> ${result.data.used_by.join(', ') || 'None'}</p>
+                    <p><strong><i class="fa-solid fa-exclamation-triangle mr-2 text-blue-400"></i>Violations:</strong> ${result.data.violations}</p>
+                    <p><strong><i class="fa-solid fa-user mr-2 text-blue-400"></i>Created By:</strong> ${result.data.created_by}</p>
+                    <p><strong><i class="fa-solid fa-calendar mr-2 text-blue-400"></i>Created At:</strong> ${new Date(result.data.created_at).toLocaleString()}</p>
+                `;
+                checkResultDiv.classList.remove('hidden');
+                showMessage(`Key ${key} info retrieved.`, 'msg-info');
+            } else {
+                checkResultDiv.textContent = '';
+                checkResultDiv.classList.add('hidden');
+                showMessage(`Error checking key: ${result.error}`, 'msg-error');
+            }
+        }
+
+        async function banKey(key_to_ban = null) {
+            const key = key_to_ban || document.getElementById('ban_key_input').value;
+            if (!key) {
+                showMessage("Please enter a key to ban.", "msg-error");
+                return;
+            }
+            if (!confirm(`Are you sure you want to BAN key: ${key}?`)) {
+                return;
+            }
+            const result = await callApi('/ban', 'POST', { key: key });
+            if (result.success) {
+                showMessage(`Key ${key} banned.`, 'msg-success');
+                if (!key_to_ban) {
+                    document.getElementById('ban_key_input').value = '';
+                }
+                loadKeys();
+            } else {
+                showMessage(`Error banning key: ${result.error}`, 'msg-error');
+            }
+        }
+
+        async function unbanKey(key_to_unban = null) {
+            const key = key_to_unban || document.getElementById('unban_key_input').value;
+            if (!key) {
+                showMessage("Please enter a key to unban.", "msg-error");
+                return;
+            }
+            if (!confirm(`Are you sure you want to UNBAN key: ${key}?`)) {
+                return;
+            }
+            const result = await callApi('/unban', 'POST', { key: key });
+            if (result.success) {
+                showMessage(`Key ${key} unbanned.`, 'msg-success');
+                if (!key_to_unban) {
+                    document.getElementById('unban_key_input').value = '';
+                }
+                loadKeys();
+            } else {
+                showMessage(`Error unbanning key: ${result.error}`, 'msg-error');
+            }
+        }
+
+        async function deleteKey(key_to_delete = null) {
+            const key = key_to_delete || document.getElementById('delete_key_input').value;
+            if (!key) {
+                showMessage("Please enter a key to delete.", "msg-error");
+                return;
+            }
+            if (!confirm(`Are you sure you want to delete key: ${key}? This action cannot be undone.`)) {
+                return;
+            }
+            const result = await callApi('/deletekey', 'POST', { key: key });
+            if (result.success) {
+                showMessage(`Key ${key} deleted.`, 'msg-success');
+                if (!key_to_delete) {
+                    document.getElementById('delete_key_input').value = '';
+                }
+                loadKeys();
+            } else {
+                showMessage(`Error deleting key: ${result.error}`, 'msg-error');
+            }
+        }
+
+        async function loadKeys() {
+            const result = await callApi('/keys', 'GET');
+            const tableBody = document.querySelector('#keys_table tbody');
+            tableBody.innerHTML = '';
+
+            if (result.success) {
+                result.data.forEach(key => {
+                    const row = tableBody.insertRow();
+                    row.insertCell().textContent = key.key_string;
+                    row.insertCell().textContent = new Date(key.expires_at).toLocaleString();
+                    row.insertCell().textContent = key.hwid || 'N/A';
+
+                    const statusCell = row.insertCell();
+                    const statusBadge = document.createElement('span');
+                    statusBadge.textContent = key.is_banned ? 'Banned' : 'Active';
+                    statusBadge.className = `badge ${key.is_banned ? 'badge-danger' : 'badge-success'}`;
+                    statusCell.appendChild(statusBadge);
+
+                    row.insertCell().textContent = key.violations;
+
+                    const actionsCell = row.insertCell();
+                    actionsCell.className = 'actions-col';
+                    const banBtn = document.createElement('button');
+                    banBtn.innerHTML = '<i class="fa-solid fa-ban mr-1"></i>Ban';
+                    banBtn.className = 'btn btn-red text-xs px-0.5 py-0.25 mr-1';
+                    banBtn.onclick = () => banKey(key.key_string);
+
+                    const unbanBtn = document.createElement('button');
+                    unbanBtn.innerHTML = '<i class="fa-solid fa-unlock mr-1"></i>Unban';
+                    unbanBtn.className = 'btn btn-green text-xs px-0.5 py-0.25 mr-1';
+                    unbanBtn.onclick = () => unbanKey(key.key_string);
+
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.innerHTML = '<i class="fa-solid fa-trash mr-1"></i>Delete';
+                    deleteBtn.className = 'btn btn-red text-xs px-0.5 py-0.25';
+                    deleteBtn.onclick = () => deleteKey(key.key_string);
+
+                    actionsCell.appendChild(banBtn);
+                    actionsCell.appendChild(unbanBtn);
+                    actionsCell.appendChild(deleteBtn);
+                });
+            } else {
+                showMessage(`Failed to load keys: ${result.error}`, 'msg-error');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', loadKeys);
+    </script>
+</body>
+</html>
